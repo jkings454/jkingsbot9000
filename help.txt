@@ -1,0 +1,20 @@
+__**jkingsbot9000, a discord bot by jkings454**__
+
+https://github.com/jkings454/jkingsbot9000
+
+```
+Available Commands
+---
+
+!time [timezone] -- Get the current time in the specified timezone. Returns UTC time if timezone is not specified
+
+!tigtime         -- Shortcut for !time Australia/Sydney
+
+!kingstime       -- Shortcut for !time US/Mountain
+
+!test            -- Say hi to the bot!
+
+!quote           -- Gets a random quote from http://forismatic.com/en/
+
+!help            -- Display this message
+```
