@@ -5,7 +5,7 @@ Plugin for time-related functions (i.e. timezone conversions
 import pytz
 from datetime import datetime
 
-def current_time_for_timezone(timezone):
+def current_time_for_timezone(timezone, format):
     if type(timezone) == str:
         try:
             timezone = pytz.timezone(timezone)
@@ -15,9 +15,9 @@ def current_time_for_timezone(timezone):
 
     current_time = datetime.now(timezone)
 
-    return current_time.strftime("%y/%m/%d [%H:%M:%S]")
+    return current_time.strftime(format)
 
-def current_utc_time():
+def current_utc_time(format):
     current_time = datetime .utcnow()
 
-    return current_time.strftime("%y/%m/%d [%H:%M:%S] UTC")
+    return current_time.strftime(format) + " UTC"

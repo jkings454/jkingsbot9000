@@ -17,4 +17,6 @@ Available Commands
 !quote           -- Gets a random quote from http://forismatic.com/en/
 
 !help            -- Display this message
+
+!help time       -- Display a list of supported timezones for the time module
 ```
