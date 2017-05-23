@@ -55,7 +55,7 @@ async def on_message(message):
         if message.author.id == TIG_ID:
             await client.send_message(message.channel, "eyy bb ;)")
         elif message.author.id == KINGS_ID:
-            await client.send_message(message.channel, "All Hail " + message.author.mention + "!")
+            await client.send_message(message.channel, ":crown: All Hail " + message.author.mention + "! :crown:")
         else:
             await client.send_message(message.channel, "Hello " + message.author.mention + "!")
 
@@ -166,7 +166,8 @@ async def on_message(message):
             return
 
         gayness = ["gaaaaaay", "yes", "very", "indeed", "of course", "sure why not", "unbelievably so",
-                   "only for tigrriis", "only for jkings", "oh you just noticed?", "pfft"]
+                   "only for tigrriis", "only for jkings", "oh you just noticed?", "pfft", ":wink:", ":kissing_heart:",
+                   ":gay_pride_flag:", ":eggplant:"]
         await client.send_message(message.channel, random.choice(gayness))
 
 @client.event
@@ -183,6 +184,24 @@ async def on_member_update(before, after):
             user = await client.get_user_info(KINGS_ID)
             await client.send_message(user, "Your boyfriend is online.")
             await client.send_message(before, "Hey bb ;)")
+
+    if len(after.roles) > len(before.roles):
+        enabled_channels = []
+        for channel in before.server.channels:
+            if channel.name in settings[before.server.id]["enabledChannels"]:
+                enabled_channels.append(channel)
+
+        for channel in enabled_channels:
+            await client.send_message(channel, before.name + " just gained a new role!")
+
+    elif len(before.roles) > len(after.roles):
+        enabled_channels = []
+        for channel in before.server.channels:
+            if channel.name in settings[before.server.id]["enabledChannels"]:
+                enabled_channels.append(channel)
+
+        for channel in enabled_channels:
+            await client.send_message(channel, before.name + " just lost a role! lol.")
 
 def get_random_quote():
     quote = requests.get("https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en")
