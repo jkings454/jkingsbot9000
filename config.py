@@ -6,14 +6,18 @@ class Config():
     """
 
     def __init__(self, file="settings.json"):
-        self.fo = open(format(file, "rw+"))
-        self.settings = json.load(self.fo)
+        self.file = file
+        fo = open(self.file)
+        self.settings = json.load(fo)
+        fo.close()
 
     def save(self):
-        json.dump(self.settings, self.fo)
-
-    def close(self):
-        self.fo.close()
+        fo = open(self.file, "w+")
+        json.dump(self.settings, fo)
+        fo.close()
 
     def create_empty_list(self, key):
-        self.settings[key] = ""
+        self.settings[key] = []
+
+    def create_empty_dict(self, key):
+        self.settings[key] = {}

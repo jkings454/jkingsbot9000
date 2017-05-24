@@ -6,17 +6,16 @@ https://github.com/jkings454/jkingsbot9000
 Available Commands
 ---
 
-!time [timezone] -- Get the current time in the specified timezone. Returns UTC time if timezone is not specified
+!time [timezones]  -- Get the time for the specified timezones.
+                      If there's no timezone specified,
+                      then UTC is returned.
 
-!tigtime         -- Shortcut for !time Australia/Sydney
 
-!kingstime       -- Shortcut for !time US/Mountain
+!test              -- Say hi to the bot!
 
-!test            -- Say hi to the bot!
+!quote             -- Gets a random quote from http://forismatic.com/en/
 
-!quote           -- Gets a random quote from http://forismatic.com/en/
+!help              -- Display this message
 
-!help            -- Display this message
-
-!help time       -- Display a list of supported timezones for the time module
+!help time         -- Display a list of supported timezones for the time module
 ```
