@@ -36,6 +36,12 @@ async def on_server_join(server):
     logger.log_event("Joined server " + server.name)
 
 @client.event
+async def on_server_remove(server):
+    del myconf.settings[server.id]
+    myconf.save()
+    logger.log_event("Removed server " + server.name)
+
+@client.event
 async def on_message(message):
 
     if "i'm gay" in message.content.lower():
@@ -66,6 +72,9 @@ async def on_message(message):
         fo.close()
 
         await client.send_message(message.channel, text)
+
+    elif parsed.command == "invite":
+        await client.send_message(message.channel, discord.utils.oauth_url("315253280676773888"))
 
     elif parsed.command == "enable":
         # Adds the channel to the active channels.
@@ -161,6 +170,44 @@ async def on_message(message):
         await client.send_typing(message.channel)
         await client.send_message(message.channel, get_random_quote())
 
+    elif parsed.command == "duel":
+        if not is_enabled_channel(message.channel, myconf.settings):
+            await client.send_message(message.channel, "This channel isn't enabled. "
+                                                       "Please have an administrator run !enable")
+            return
+
+        if type(message.channel) == discord.PrivateChannel:
+            await client.send_message(message.channel, "Sorry, this command can only be used on a server.")
+            return
+
+        if parsed.args:
+            user = get_user_by_name(message.server, parsed.args[0])
+
+            if not user:
+                await client.send_message(message.channel, "Sorry, I couldn't find that username on this server.")
+                return
+
+            if user.id == message.author.id:
+                await client.send_message(message.channel, "You can't duel yourself, silly!")
+                return
+
+            await client.send_message(message.channel, user.mention + ", " + message.author.name
+                                      + " has challenged you to a duel! Type `!accept` to accept the duel.")
+
+            msg = await client.wait_for_message(author=user, content="!accept", timeout=30)
+
+            if msg:
+                winner = random.choice([user, message.author])
+                fun_gif = random.choice(myconf.settings["duel_stuff"])
+                saying = random.choice(["En garde!", "So it's like this, huh?", "Prepare to die!"])
+
+                await client.send_message(message.channel, saying + "\n" + fun_gif)
+                await client.send_message(message.channel, winner.mention + " wins!")
+
+        else:
+            await client.send_message(message.channel, "")
+
+
 
 
 # Helper methods which may or may not be changed in the future
@@ -174,6 +221,21 @@ def is_admin(user, channel):
 def get_enabled_channels(server, settings):
     list = [channel for channel in server.channels if (channel.id in settings[server.id]["enabledChannels"])]
     return list
+
+def get_user_by_name(server, name):
+    """
+    Returns a user where "name" is in the user's name
+    returns the first user.
+    :param server: the server where the user is
+    :param name: the name that you wish to find
+    :return: the first user with "name" in their name
+    """
+    list = [user for user in server.members if (name.lower() in user.name.lower())]
+    if not list:
+        return None
+
+    return list[0]
+
 
 def is_enabled_channel(channel, settings):
     if type(channel) == discord.PrivateChannel:
