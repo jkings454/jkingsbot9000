@@ -18,4 +18,5 @@ Available Commands
 !help              -- Display this message
 
 !help time         -- Display a list of supported timezones for the time module
+
 ```

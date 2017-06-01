@@ -170,6 +170,16 @@ async def on_message(message):
         await client.send_typing(message.channel)
         await client.send_message(message.channel, get_random_quote())
 
+
+    elif parsed.command == "sonicoc":
+        animals = ["hedgehog", "fox", "cat", "wolf", "armadillo", "bat", "echidna", "wombat"]
+
+        await client.send_typing(message.channel)
+
+        oc = get_random_word() + " the " + random.choice(animals)
+        await client.send_message(message.channel, oc)
+
+
     elif parsed.command == "duel":
         if not is_enabled_channel(message.channel, myconf.settings):
             await client.send_message(message.channel, "This channel isn't enabled. "
@@ -237,6 +247,15 @@ def get_user_by_name(server, name):
     return list[0]
 
 
+async def test_twopointo(message):
+    if message.author.id == TIG_ID:
+        return client.send_message(message.channel, "eyy bb ;)")
+    elif message.author.id == KINGS_ID:
+        return client.send_message(message.channel, ":crown: All Hail " + message.author.mention + "! :crown:")
+    else:
+        return client.send_message(message.channel, "Hello " + message.author.mention + "!")
+
+
 def is_enabled_channel(channel, settings):
     if type(channel) == discord.PrivateChannel:
         # We're in a PM or a group chat. There is no channel.
@@ -246,11 +265,17 @@ def is_enabled_channel(channel, settings):
 
 def get_random_quote():
     quote = requests.get("https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en")
-    quote = json.loads(quote.text)
+    quote = quote.json()
 
     message = "\"" + quote["quoteText"] + "\""
     message += "\n\n -- " + quote["quoteAuthor"]
 
     return message
+
+def get_random_word():
+    res = requests.get("http://setgetgo.com/randomword/get.php")
+    word = res.text
+
+    return word
 
 client.run(myconf.settings["client_secret"])
